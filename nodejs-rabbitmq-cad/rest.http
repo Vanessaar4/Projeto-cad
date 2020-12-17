@@ -1,0 +1,15 @@
+POST http://localhost:3001/express
+content-type: application/json
+
+{
+    "name": "eu sou express"
+}
+
+###
+
+POST http://localhost:3000/nest
+content-type: application/json
+
+{
+    "name": "eu sou nest"
+}

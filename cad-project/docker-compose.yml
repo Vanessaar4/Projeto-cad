@@ -1,0 +1,89 @@
+version: '3.7'
+
+services:
+  rabbitmq:
+    container_name: cad-rabbitmq
+    image: rabbitmq:3.7.28-management
+    ports:
+      - 15672:15672
+      - 5672:5672
+    depends_on:
+      - vault
+    networks:
+      - cad-net
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+
+  psmdb:
+    container_name: cad-psmdb
+    image: percona/percona-server-mongodb:4.2
+    user: root
+    environment:
+      - VAULT_BASE_URL=http://vault:8200
+    command: initializing_psmdb.sh
+    volumes:
+      - type: volume
+        source: psmdb-data
+        target: /data/db
+      - ./config/mongodb/psmdb-tokenFile:/tmp/psmdb-tokenFile:rw
+      - type: bind
+        source: ./config/mongodb/initializing_psmdb.sh
+        target: /usr/bin/initializing_psmdb.sh
+
+    depends_on:
+      - vault
+    networks:
+      - cad-net
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+
+  vault:
+    container_name: cad-vault
+    hostname: vault
+    image: vault:1.5.4
+    restart: always
+    environment:
+      - VAULT_ADDR=http://localhost:8200
+      - VAULT_SKIP_VERIFY=true
+    command: initializing_vault.sh
+    ports:
+      - 8200:8200
+    volumes:
+      - type: bind
+        source: ./config/vault/.keys
+        target: /etc/vault/.keys
+      - type: volume
+        source: vault-data
+        target: /tmp/vault-data
+      - type: bind
+        source: ./config/vault/policies
+        target: /etc/vault/policies/
+      - type: bind
+        source: ./config/vault/initializing_vault.sh
+        target: /usr/bin/initializing_vault.sh
+      - type: bind
+        source: ./config/vault/config.hcl
+        target: /etc/vault/config.hcl
+    networks:
+      - cad-net
+    logging:
+      driver: json-file
+      options:
+        max-size: 100m
+
+volumes:
+  psmdb-data:
+    name: cad-psmdb-data
+  vault-data:
+    name: cad-vault-data
+
+networks:
+  cad-net:
+    name: cad-net
+    driver: bridge
+    driver_opts:
+      encrypted: "true"

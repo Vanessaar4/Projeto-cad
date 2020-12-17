@@ -1,0 +1,62 @@
+
+body{
+    background-color: rgb(107, 187, 219);
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+h1{
+    color: rgb(104, 104, 9);
+    font-family: fantasy;
+    text-align: center;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+.ima{
+    float: left; 
+    margin-left: 2%;
+    border: black;
+    margin-bottom: 20px;
+ 
+}
+
+.btn-acesso {
+    display: block;
+    border: none;
+    border-radius: 15px;
+    text-transform: uppercase;
+    color: rgb(19, 18, 18);
+    font-size: 10px;
+    padding: 10px 50px;
+    cursor: pointer;
+    font-weight: bold;
+    align-self: center;
+    margin: auto;
+}
+
+.btn-acesso {
+    background-color: yellow;
+    border: 1px solid rgb(15, 15, 15);
+    transition: background-color .5s;
+    margin-top: 400px;
+}
+.btn-acesso:hover {
+    background-color: black;
+    color: rgb(170, 170, 52);
+}
+
+footer{
+    background: yellow;
+    color: black;
+    text-align: center;
+    Font-family: fantasy;
+    margin-top: 200px;
+}
+
